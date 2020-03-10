@@ -15,6 +15,7 @@ router.get('/', async(request, response) => {
 router.post('/messages', async(request, response) => {
   let messageBody = request.body.body;
   let messageTime = new Date();
+  console.log(request.body.mood);
   let messageMood = request.body.mood;
 
   try {
