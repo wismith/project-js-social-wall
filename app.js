@@ -43,7 +43,7 @@ app.use(cookieParser());
 // See http://knexjs.org/
 let Knex = require('knex');
 
-// Objection is a module used to represent and manipuldate
+// Objection is a module used to represent and manipulate
 // data from a SQL database using JavaScript. It uses connect
 // to generate the appropriate SQL queries.
 // See https://vincit.github.io/objection.js/

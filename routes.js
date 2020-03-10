@@ -35,4 +35,16 @@ router.post('/messages', async(request, response) => {
   }
 });
 
+// LIKE a message
+router.post('/likes', async(request, response) => {
+
+  let likedMessageId = request.body.id;
+
+  await Message.query()
+    .findById(likedMessageId)
+    .increment('likes', 1);
+
+  response.redirect('/');
+});
+
 module.exports = router;

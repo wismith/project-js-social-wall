@@ -31,7 +31,11 @@
             </div>
             <div class="message-timestamp">
               Posted on {{createdAt}}
+            </div></s>
+            <div class="likes">
+              {{likes}} Likes
             </div>
+            <button method="POST" type="submit" action='/likes'>Like</button>
           </li>
         {{/each}}
       </ol>
