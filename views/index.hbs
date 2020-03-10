@@ -18,15 +18,13 @@
     <button type="submit">Post Message</button>
   </form>
 
-  <div id="messages">
+  <div id="messages" class="message-list">
     <h2>Messages</h2>
 
     {{#unless messages}}
       <p>Sorry, no messages. :(</p>
     {{else}}
-      <ol class="message-list">
         {{#each messages}}
-          <li>
             <div class="message" id={{id}}>
               <div class="message-body">
                 {{body}}
@@ -48,9 +46,7 @@
                 <button type="submit">Like</button>
               </form>
             </div>
-          </li>
         {{/each}}
-      </ol>
     {{/unless}}
   </div>
 </div>
