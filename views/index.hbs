@@ -26,16 +26,20 @@
       <ol class="message-list">
         {{#each messages}}
           <li>
-            <div class="message-body">
-              {{body}}
+            <div class="message">
+              <div class="message-body">
+                {{body}}
+              </div>
+              <div class="message-timestamp">
+                Posted on {{createdAt}}
+              </div></s>
+              <div class="likes">
+                {{likes}} Likes
+              </div>
+              <form action="/messages/{{id}}/like" method="POST" id="like-form">
+                <button type="submit">Like</button>
+              </form>
             </div>
-            <div class="message-timestamp">
-              Posted on {{createdAt}}
-            </div></s>
-            <div class="likes">
-              {{likes}} Likes
-            </div>
-            <button method="POST" type="submit" action='/likes'>Like</button>
           </li>
         {{/each}}
       </ol>
