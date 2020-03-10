@@ -14,6 +14,7 @@
 
   <form id="message-form" method="POST" action="/messages">
     <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
+    <input type="text" name="mood" placeholder="Mood">
     <button type="submit">Post Message</button>
   </form>
 
@@ -26,15 +27,22 @@
       <ol class="message-list">
         {{#each messages}}
           <li>
-            <div class="message">
+            <div class="message" id={{id}}>
               <div class="message-body">
                 {{body}}
+              </div>
+              <div class="message-mood">
+                {{#if mood}}
+                feeling {{mood}}
+                {{/if}}
               </div>
               <div class="message-timestamp">
                 Posted on {{createdAt}}
               </div></s>
               <div class="likes">
+                {{#if likes}}
                 {{likes}} Likes
+                {{/if}}
               </div>
               <form action="/messages/{{id}}/like" method="POST" id="like-form">
                 <button type="submit">Like</button>
