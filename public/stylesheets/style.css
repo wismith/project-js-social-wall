@@ -1,13 +1,24 @@
 body {
-  background-color: rgb(250, 227, 175);
+  background-color: #772014;
   color: rgb(75, 33, 0);
   font-family: 'Helvetica', 'Arial', sans-serif;
   box-sizing: border-box;
+  width: 100%;
 }
 
+#page {
+  width:100%;
+}
 #page-header {
-  margin: 20px auto;
-  width: 400px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #19180A;
+  color: #E71D36;
+  height: fit-content;
+  padding: 2%;
+  text-align: center;
+
+
 }
 
 #error-page {
@@ -17,7 +28,7 @@ body {
 
 #messages-page {
   margin: 20px auto;
-  width: 400px;
+  width: 50%;
 }
 
 #message-form {
@@ -34,6 +45,24 @@ body {
   width: 100%;
 }
 
+#messages {
+  width: 100%;
+  text-align: center;
+  padding: 2%;
+}
+
+#messages h2 {
+  color: #E71D36;
+}
+
+.message-list {
+  background-color: #19180A;
+  border: 5px solid #19180A;
+  border-radius: .5rem;
+  width: 100%;
+  text-align: center;
+  margin: 2% auto;
+}
 .message-list .message-timestamp {
   font-size: 12px;
   font-style: italic;
@@ -44,9 +73,11 @@ body {
 
 .message {
   margin: 2% auto;
-  border: 5px solid rgb(75, 33, 0);
+  border: 5px solid #E71D36;
   border-radius: .5rem;
   padding: 1%;
+  background-color: white;
+  text-align: left;
 }
 
 .notice {
@@ -68,4 +99,8 @@ body {
   margin-bottom: .5rem;
   font-weight: 500;
   line-height: 1.2;
+}
+
+#page-content {
+  margin: 2% auto;
 }

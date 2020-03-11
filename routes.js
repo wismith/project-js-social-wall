@@ -15,10 +15,13 @@ router.get('/', async(request, response) => {
 router.post('/messages', async(request, response) => {
   let messageBody = request.body.body;
   let messageTime = new Date();
+  console.log(request.body.mood);
+  let messageMood = request.body.mood;
 
   try {
     await Message.query().insert({
       body: messageBody,
+      mood: messageMood,
       createdAt: messageTime,
     });
 
@@ -46,7 +49,7 @@ router.post('/messages/:messageId/like', async(request, response) => {
     .findById(Number(messageId))
     .increment('likes', 1);
 
-  response.redirect('/');
+  response.redirect(`/#${messageId}`);
 });
 
 module.exports = router;
