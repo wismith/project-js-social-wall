@@ -54,8 +54,8 @@
                 Posted on {{createdAt}}
               </div></s>
               <div class="likes">
-                {{#if likes}}
-                {{likes}} Likes
+                {{#if messageLikes}}
+                {{messageLikes}} Likes
                 {{/if}}
               </div>
               <form action="/messages/{{id}}/like" method="POST" id="like-form">

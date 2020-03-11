@@ -6,6 +6,9 @@ let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let express = require('express');
 
+let pg = require('pg');
+pg.types.setTypeParser(pg.types.builtins.INT8, BigInt);
+
 let app = express();
 
 if (!process.env.NODE_ENV) {

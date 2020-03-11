@@ -33,7 +33,18 @@ router.post('/login', passport.authenticate('local', {
 
 // GET /
 router.get('/', async(request, response) => {
-  let messages = await Message.query().select('*').orderBy('created_at', 'DESC');
+  let messages = await Message.query()
+    .select('messages.id', 'body', 'mood', 'messages.created_at')
+    .count('likes.id', {as: 'message_likes'})
+    .leftJoin('likes', 'likes.message_id', 'messages.id')
+    .groupBy('messages.id')
+    .orderBy('messages.created_at', 'DESC');
+
+  console.log(messages);
+
+  // for (let message of messages) {
+  //   message['messageLikes'] = Number(message['messageLikes']);
+  // }
 
   response.render('index', { messages });
 });
@@ -74,12 +85,14 @@ router.post('/messages', async(request, response) => {
 router.post('/messages/:messageId/like', async(request, response) => {
 
   let messageId = request.params.messageId;
+  let likeTime = new Date();
   console.log(messageId);
 
 
-  await Message.query()
-    .findById(Number(messageId))
-    .increment('likes', 1);
+  await Like.query().insert({
+    messageId: messageId,
+    createdAt: likeTime
+  });
 
   response.redirect(`/#${messageId}`);
 });

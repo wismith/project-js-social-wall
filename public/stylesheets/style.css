@@ -69,12 +69,22 @@ body {
   text-align: center;
   margin: 2% auto;
 }
+
+.message-list .message-body {
+  font-size: 20px;
+}
+
 .message-list .message-timestamp {
   font-size: 12px;
   font-style: italic;
   margin-bottom: 10px;
   margin-top: 10px;
   text-align: right;
+}
+
+.message-list .message-mood {
+  font-size: 14px;
+  font-style: italic;
 }
 
 .message {
