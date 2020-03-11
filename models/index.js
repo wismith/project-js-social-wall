@@ -2,6 +2,8 @@
 
 let fs = require('fs');
 let path = require('path');
+const Handlebars = require('express-handlebars');
+
 
 function isModelFile(fileName) {
   let baseName = path.basename(module.filename);

@@ -26,6 +26,7 @@ app.inDevelopment = () => app.get('env') === 'development';
 app.set('views', app.root('views'));
 app.set('view engine', 'hbs');
 
+
 // Put static files like stylesheets in public/
 app.use(express.static(app.root('public')));
 
