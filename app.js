@@ -5,6 +5,7 @@ let createError = require('http-errors');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let express = require('express');
+let flash = require('connect-flash');
 
 let pg = require('pg');
 pg.types.setTypeParser(pg.types.builtins.INT8, BigInt);
@@ -32,6 +33,9 @@ app.set('view engine', 'hbs');
 
 // Put static files like stylesheets in public/
 app.use(express.static(app.root('public')));
+
+// Use flash
+app.use(flash());
 
 // Use a different log format for development vs. production
 if (app.inDevelopment()) {

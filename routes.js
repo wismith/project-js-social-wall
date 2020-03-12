@@ -2,6 +2,10 @@ let Router = require('express-promise-router');
 let { Message, User, Like } = require('./models');
 let { ValidationError } = require('objection');
 let Password = require('objection-password');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+let session = require('express-session');
+
 
 let router = new Router();
 
@@ -22,16 +26,16 @@ router.get('/', async(request, response) => {
   //   message['messageLikes'] = Number(message['messageLikes']);
   // }
 
-  if (user) {
-    response.render('index', { messages, user });
-  } else {
-    response.render('index', { messages });
-  }
+  response.render('index', { messages });
 });
 
-// Register
+// Authentication
 
-router.post('/register', async(request, response) => {
+router.get('/sign-up', async(request, response) => {
+  response.render('sign-up');
+})
+
+router.post('/sign-up', async(request, response) => {
   let newEmail = request.body.email;
   let newPassword = request.body.password;
   let newScreenName = request.body.screenName;
@@ -45,7 +49,8 @@ router.post('/register', async(request, response) => {
 
     console.log('New User: ', user);
 
-    response.redirect(`/?user=${user}`);
+    response.redirect('/');
+
   } catch(error) {
     console.log('This registration didn\'t work!');
     console.log(request.body);
@@ -60,6 +65,70 @@ router.post('/register', async(request, response) => {
     }
   }
 })
+
+router.get('/sign-in', async(request, response) => {
+  response.render('sign-in');
+});
+
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  async function(email, password, done) {
+    const activeUser = await User.query().first().where({
+      email: email
+    })
+
+    const passwordValid = await activeUser.verifyPassword(password);
+
+    if (passwordValid) {
+      console.log('User logged in: ', activeUser);
+      return done(null, activeUser);
+    } else {
+      return done(null, false, { message: 'Invalid login' });
+    }
+      /* if (!user) {
+        return done(null, false, { message: 'Incorrect email.'});
+      }
+
+      if (!user.validPassword(password)) {
+        return done(null, false, {message: 'Incorrect password.'});
+      }
+      return done(null, user); */
+    }
+  )
+);
+
+router.post('/sign-in',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/sign-in',
+    failureFlash: true
+  })
+);
+
+
+
+/* router.post('/sign-in', async(request, response) => {
+
+  console.log(request.body);
+  let emailGiven = request.body.email;
+  let passwordGiven = request.body.password;
+
+  const activeUser = await User.query().first().where({
+    email: emailGiven,
+  });
+
+  console.log(activeUser);
+  let passwordValid = await activeUser.verifyPassword(passwordGiven);
+
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/sign-in',
+    failureFlash: true
+  });
+}) */
 
 // POST /messages
 router.post('/messages', async(request, response) => {
