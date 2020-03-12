@@ -1,34 +1,10 @@
 let Router = require('express-promise-router');
-let { Message } = require('./models');
+let { Message, User, Like } = require('./models');
 let { ValidationError } = require('objection');
+let Password = require('objection-password');
 
 let router = new Router();
 
-// Passport configuration
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
-// Post /login
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true,
-}));
 
 
 // GET /
@@ -46,15 +22,47 @@ router.get('/', async(request, response) => {
   //   message['messageLikes'] = Number(message['messageLikes']);
   // }
 
-  response.render('index', { messages });
+  if (user) {
+    response.render('index', { messages, user });
+  } else {
+    response.render('index', { messages });
+  }
 });
+
+// Register
+
+router.post('/register', async(request, response) => {
+  let newEmail = request.body.email;
+  let newPassword = request.body.password;
+  let newScreenName = request.body.screenName;
+
+  try {
+    const user = await User.query().insert({
+      email: newEmail,
+      password: newPassword,
+      screenName: newScreenName,
+    });
+
+    console.log('New User: ', user);
+
+    response.redirect(`/?user=${user}`);
+  } catch(error) {
+    console.log('This registration didn\'t work!');
+    console.log(request.body);
+
+    if (error instanceof ValidationError) {
+      let messages = await Message.query().select('*').orderBy('created_at', 'DESC');
+      let errors = error.data;
+
+      response.render('index', { messages, errors });
+    } else {
+      throw error;
+    }
+  }
+})
 
 // POST /messages
 router.post('/messages', async(request, response) => {
-  if (!request.user) {
-    alert('You must log in to post to this page!');
-    response.redirect('/login');
-  }
 
   let messageBody = request.body.body;
   let messageTime = new Date();
@@ -66,6 +74,7 @@ router.post('/messages', async(request, response) => {
       body: messageBody,
       mood: messageMood,
       createdAt: messageTime,
+      // userId: ??
     });
 
     response.redirect('/');

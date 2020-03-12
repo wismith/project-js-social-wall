@@ -1,18 +1,3 @@
-<div id="login" class="login-show">
-  <form action="/login" method="post">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="username"/>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
-    </div>
-    <div>
-        <input type="submit" value="Log In"/>
-    </div>
-  </form>
-</div>
 
 <div id="messages-page">
   {{#if errors}}
@@ -27,6 +12,20 @@
       </ul>
     </div>
   {{/if}}
+
+  {{#if user}}
+  <div id="user-box">
+    <h5><em>Logged in as:</em></h5>
+    <h3>{{user.screenName}}</h3>
+  </div>
+  {{/if}}
+
+  <form id="new-user-form" method="POST" action="/register">
+    <input type="text" name="email" placeholder="Your Email">
+    <input type="text" name="password" placeholder="New Password">
+    <input type="text" name="screenName" placeholder="Screen Name">
+    <button type="submit">Create Profile</button>
+  </form>
 
   <form id="message-form" method="POST" action="/messages">
     <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>

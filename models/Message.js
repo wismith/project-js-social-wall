@@ -27,7 +27,6 @@ class Message extends Model {
       properties: {
         id: { type: 'integer' },
         body: { type: 'string', minLength: 1 },
-        likes: { type: 'integer' },
       }
     };
   }
