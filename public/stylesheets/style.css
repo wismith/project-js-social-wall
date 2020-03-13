@@ -1,9 +1,18 @@
+#login {
+  display: none;
+}
+
+#login.login-show {
+  display: block;
+}
+
 body {
   background-color: #772014;
-  color: rgb(75, 33, 0);
+  color: white;
   font-family: 'Helvetica', 'Arial', sans-serif;
   box-sizing: border-box;
   width: 100%;
+
 }
 
 #page {
@@ -17,8 +26,6 @@ body {
   height: fit-content;
   padding: 2%;
   text-align: center;
-
-
 }
 
 #error-page {
@@ -87,6 +94,7 @@ body {
   border-radius: .5rem;
   padding: 1%;
   background-color: white;
+  color: #772014;
   text-align: left;
 }
 

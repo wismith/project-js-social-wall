@@ -1,3 +1,12 @@
+<div id="auth-options">
+  {{#if user}}
+  {{else}}
+  <a href="/sign-up"><button>Sign Up</button></a>
+  <a href="/sign-in"><button>Sign In</button></a>
+  {{/if}}
+</div>
+
+
 <div id="messages-page">
   {{#if errors}}
     <div class="notice error">
@@ -10,6 +19,13 @@
         {{/each}}
       </ul>
     </div>
+  {{/if}}
+
+  {{#if user}}
+  <div id="user-box">
+    <h5><em>Logged in as:</em></h5>
+    <h3>{{user.screenName}}</h3>
+  </div>
   {{/if}}
 
   <form id="message-form" method="POST" action="/messages">
@@ -26,6 +42,9 @@
     {{else}}
         {{#each messages}}
             <div class="message" id={{id}}>
+              <div class="message-user">
+                {{screenName}}:
+              </div>
               <div class="message-body">
                 {{body}}
               </div>
@@ -34,17 +53,19 @@
                 feeling {{mood}}
                 {{/if}}
               </div>
-              <div class="message-timestamp">
+
+              <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
+                <button type="submit">
+                  {{#if messageLikes}}
+                  {{messageLikes}} <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                  {{else}}
+                  <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                  {{/if}}
+                  </button>
+              </form>
+              <div class="message-timestamp" style="display: inline">
                 Posted on {{createdAt}}
               </div></s>
-              <div class="likes">
-                {{#if messageLikes}}
-                {{messageLikes}} Likes
-                {{/if}}
-              </div>
-              <form action="/messages/{{id}}/like" method="POST" id="like-form">
-                <button type="submit">Like</button>
-              </form>
             </div>
         {{/each}}
     {{/unless}}
