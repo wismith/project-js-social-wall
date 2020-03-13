@@ -14,20 +14,21 @@ let router = new Router();
 // GET /
 router.get('/', async(request, response) => {
   let messages = await Message.query()
-    .select('messages.id', 'body', 'mood', 'messages.created_at')
+    .select('messages.id', 'body', 'mood', 'messages.created_at', 'users.screen_name')
     .count('likes.id', {as: 'message_likes'})
     .leftJoin('likes', 'likes.message_id', 'messages.id')
-    .groupBy('messages.id')
+    .leftJoin('users', 'users.id', 'messages.user_id')
+    .groupBy('messages.id', 'users.screen_name')
     .orderBy('messages.created_at', 'DESC');
 
   console.log(messages);
-  console.log(request);
 
-  // for (let message of messages) {
-  //   message['messageLikes'] = Number(message['messageLikes']);
-  // }
-
-  response.render('index', { messages });
+  if (request.user) {
+    let user = request.user;
+    response.render('index', { messages, user })
+  } else {
+    response.render('index', { messages });
+  }
 });
 
 // Authentication
@@ -106,8 +107,11 @@ router.post('/sign-in',
 // POST /messages
 router.post('/messages', async(request, response) => {
 
+  if (!request.user) {
+    response.redirect('/sign-in');
+  }
+
   let messageBody = request.body.body;
-  let messageTime = new Date();
   console.log(request.body.mood);
   let messageMood = request.body.mood;
 
@@ -134,6 +138,10 @@ router.post('/messages', async(request, response) => {
 // LIKE a message
 router.post('/messages/:messageId/like', async(request, response) => {
 
+  if (!request.user) {
+    response.redirect('/sign-in');
+  }
+
   let messageId = request.params.messageId;
   let likeTime = new Date();
   console.log(messageId);
@@ -141,7 +149,8 @@ router.post('/messages/:messageId/like', async(request, response) => {
 
   await Like.query().insert({
     messageId: messageId,
-    createdAt: likeTime
+    createdAt: likeTime,
+    userId: request.user.id
   });
 
   response.redirect(`/#${messageId}`);
