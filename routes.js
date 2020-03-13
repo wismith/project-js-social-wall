@@ -142,7 +142,7 @@ router.post('/messages/:messageId/like', async(request, response) => {
     response.redirect('/sign-in');
   }
 
-  let messageId = request.params.messageId;
+  let messageId = Number(request.params.messageId);
   console.log(messageId);
 
 

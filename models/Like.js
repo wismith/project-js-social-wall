@@ -13,13 +13,13 @@ class Like extends Model {
     return {
       type: 'object',
       required: [
-        'message_id',
-        'user_id'
+        'messageId',
+        'userId'
       ],
       properties: {
         id: { type: 'integer'},
-        message_id: {type: 'integer'},
-        user_id: {type: 'integer'}
+        messageId: {type: 'integer'},
+        userId: {type: 'integer'}
       }
     };
   }
