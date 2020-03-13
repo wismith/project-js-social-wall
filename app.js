@@ -10,9 +10,7 @@ let passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 let session = require('express-session');
 
-
 let { User } = require('./models');
-
 
 let pg = require('pg');
 pg.types.setTypeParser(pg.types.builtins.INT8, BigInt);
@@ -109,13 +107,10 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(id, done) {
-  console.log('INSIDE DESERIALIZE');
   try {
     let user = await User.query().findById(id);
-    console.log('DESERIALIZE: OK');
     done(null, user);
   } catch (err) {
-    console.log('DESERialize bad');
     done(err, false);
 
   }

@@ -1,11 +1,11 @@
 <div id="auth-options">
   {{#if user}}
+  <a href="/sign-out"><button>Sign Out</button></a>
   {{else}}
   <a href="/sign-up"><button>Sign Up</button></a>
   <a href="/sign-in"><button>Sign In</button></a>
   {{/if}}
 </div>
-
 
 <div id="messages-page">
   {{#if errors}}
@@ -43,7 +43,7 @@
         {{#each messages}}
             <div class="message" id={{id}}>
               <div class="message-user">
-                {{screenName}}:
+                <h2>{{screenName}}:</h2>
               </div>
               <div class="message-body">
                 {{body}}

@@ -1,6 +1,7 @@
 let { Model, snakeCaseMappers } = require('objection');
 
-Like = require('./Like');
+// let { Like, User } = require('../models');
+
 
 class Message extends Model {
   static get columnNameMappers() {
@@ -32,16 +33,28 @@ class Message extends Model {
     };
   }
 
-  // static relationMappings = {
-  //   likes: {
-  //     relation: Model.HasManyRelation,
-  //     modelClass: Like,
-  //     join: {
-  //       from: 'message.id',
-  //       to: 'likes.message_id'
-  //     }
-  //   }
-  // };
+  static get relationMappings() {
+    let User = require('./User');
+    let Like = require('./Like');
+    return {
+      likes: {
+        relation: Model.HasManyRelation,
+        modelClass: Like,
+        join: {
+          from: 'messages.id',
+          to: 'likes.message_id'
+        }
+      },
+      user: {
+        relation: Model.HasOneRelation,
+        modelClass: User,
+        join: {
+          from: 'messages.user_id',
+          to: 'users.id'
+        }
+      }
+    }
+  }
 }
 
 module.exports = Message;

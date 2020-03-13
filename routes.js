@@ -51,11 +51,14 @@ router.post('/sign-up', async(request, response) => {
 
     console.log('New User: ', user);
 
-    response.redirect('/');
+    passport.authenticate('local')(request, response, function () {
+      response.redirect('/');
+    });
+
+    // response.redirect('/');
 
   } catch(error) {
     console.log('This registration didn\'t work!');
-    console.log(request.body);
 
     if (error instanceof ValidationError) {
       let messages = await Message.query().select('*').orderBy('created_at', 'DESC');
@@ -66,7 +69,7 @@ router.post('/sign-up', async(request, response) => {
       throw error;
     }
   }
-})
+});
 
 router.get('/sign-in', async(request, response) => {
   response.render('sign-in');
@@ -81,6 +84,12 @@ router.post('/sign-in',
     failureFlash: true
   })
 );
+
+// Sign out
+router.get('/sign-out', function(request, response) {
+  request.logout();
+  response.redirect('/');
+});
 
 
 
@@ -112,7 +121,6 @@ router.post('/messages', async(request, response) => {
   }
 
   let messageBody = request.body.body;
-  console.log(request.body.mood);
   let messageMood = request.body.mood;
 
   try {
@@ -138,20 +146,35 @@ router.post('/messages', async(request, response) => {
 // LIKE a message
 router.post('/messages/:messageId/like', async(request, response) => {
 
-  if (!request.user) {
-    response.redirect('/sign-in');
-  }
-
   let messageId = Number(request.params.messageId);
   console.log(messageId);
 
+  if (!request.user) {
+    response.redirect('/sign-in');
+  } else {
+    let user = request.user;
 
-  await Like.query().insert({
-    messageId: messageId,
-    userId: request.user.id
-  });
+    let userLikes = await user.$relatedQuery('likes').where('message_id', messageId);
 
-  response.redirect(`/#${messageId}`);
+    console.log("PRINTING OUT USER LIKES: ",userMessageLike);
+
+    /* let userHasLikedMessage = await Message.query()
+      .select('*')
+      .where({
+        messageId: messageId,
+        likes(userId): user.id
+      })
+      .leftJoin('likes', 'likes.message_id', 'messages.id') */
+    await Like.query().insert({
+      messageId: messageId,
+      userId: request.user.id
+    });
+
+    response.redirect(`/#${messageId}`);
+  }
+
+
+
 });
 
 module.exports = router;
