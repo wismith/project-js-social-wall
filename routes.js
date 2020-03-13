@@ -143,13 +143,11 @@ router.post('/messages/:messageId/like', async(request, response) => {
   }
 
   let messageId = request.params.messageId;
-  let likeTime = new Date();
   console.log(messageId);
 
 
   await Like.query().insert({
     messageId: messageId,
-    createdAt: likeTime,
     userId: request.user.id
   });
 

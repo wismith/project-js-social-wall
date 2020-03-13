@@ -12,9 +12,14 @@ class Like extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: [
+        'message_id',
+        'user_id'
+      ],
       properties: {
         id: { type: 'integer'},
-        message_id: {type: 'integer'}
+        message_id: {type: 'integer'},
+        user_id: {type: 'integer'}
       }
     };
   }
