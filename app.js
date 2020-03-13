@@ -6,11 +6,19 @@ let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let express = require('express');
 let flash = require('connect-flash');
+let passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+let session = require('express-session');
+
+
+let { User } = require('./models');
+
 
 let pg = require('pg');
 pg.types.setTypeParser(pg.types.builtins.INT8, BigInt);
 
 let app = express();
+
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = app.get('env');
@@ -45,7 +53,9 @@ if (app.inDevelopment()) {
 }
 
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(session({ secret: 'hello' }));
+// app.use(cookieParser());
+
 
 // Knex is a module used to generate SQL queries
 // See http://knexjs.org/
@@ -62,6 +72,64 @@ let { Model } = require('objection');
 let dbConfig = require(app.root('knexfile'));
 let knex = Knex(dbConfig[process.env.NODE_ENV]);
 Model.knex(knex);
+
+// Passport stuff
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  async function(email, password, done) {
+    const activeUser = await User.query().first().where({
+      email: email
+    })
+
+    const passwordValid = await activeUser.verifyPassword(password);
+
+    if (passwordValid) {
+      console.log('User logged in: ', activeUser);
+      return done(null, activeUser);
+    } else {
+      return done(null, false, { message: 'Invalid login' });
+    }
+      /* if (!user) {
+        return done(null, false, { message: 'Incorrect email.'});
+      }
+
+      if (!user.validPassword(password)) {
+        return done(null, false, {message: 'Incorrect password.'});
+      }
+      return done(null, user); */
+    }
+  )
+);
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async function(id, done) {
+  console.log('INSIDE DESERIALIZE');
+  try {
+    let user = await User.query().findById(id);
+    console.log('DESERIALIZE: OK');
+    done(null, user);
+  } catch (err) {
+    console.log('DESERialize bad');
+    done(err, false);
+
+  }
+
+  /* User.findById(id, function(err, user) {
+    done(err, user);
+  }); */
+});
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // See routes.js — this is where our main app code lives.
 let routes = require('./routes');

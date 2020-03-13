@@ -3,7 +3,7 @@ let { Message, User, Like } = require('./models');
 let { ValidationError } = require('objection');
 let Password = require('objection-password');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+
 let session = require('express-session');
 
 
@@ -21,6 +21,7 @@ router.get('/', async(request, response) => {
     .orderBy('messages.created_at', 'DESC');
 
   console.log(messages);
+  console.log(request);
 
   // for (let message of messages) {
   //   message['messageLikes'] = Number(message['messageLikes']);
@@ -70,35 +71,7 @@ router.get('/sign-in', async(request, response) => {
   response.render('sign-in');
 });
 
-passport.use(new LocalStrategy(
-  {
-    usernameField: 'email',
-    passwordField: 'password'
-  },
-  async function(email, password, done) {
-    const activeUser = await User.query().first().where({
-      email: email
-    })
 
-    const passwordValid = await activeUser.verifyPassword(password);
-
-    if (passwordValid) {
-      console.log('User logged in: ', activeUser);
-      return done(null, activeUser);
-    } else {
-      return done(null, false, { message: 'Invalid login' });
-    }
-      /* if (!user) {
-        return done(null, false, { message: 'Incorrect email.'});
-      }
-
-      if (!user.validPassword(password)) {
-        return done(null, false, {message: 'Incorrect password.'});
-      }
-      return done(null, user); */
-    }
-  )
-);
 
 router.post('/sign-in',
   passport.authenticate('local', {
@@ -142,8 +115,7 @@ router.post('/messages', async(request, response) => {
     await Message.query().insert({
       body: messageBody,
       mood: messageMood,
-      createdAt: messageTime,
-      // userId: ??
+      userId: request.user.id
     });
 
     response.redirect('/');
