@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.table('likes', (table) => {
-    table.integer('user_id').notNullable();
+    table.integer('user_id').notNullable().references('users.id');
   });
 };
 
