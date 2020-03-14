@@ -9,6 +9,7 @@ let flash = require('connect-flash');
 let passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 let session = require('express-session');
+const handlebars = require('express-handlebars');
 
 let { User } = require('./models');
 
@@ -33,10 +34,16 @@ app.inDevelopment = () => app.get('env') === 'development';
 
 // Tell Express to look in views/ to find our view templates
 // and to use the Handlebars (hbs) to render them.
-app.set('views', app.root('views'));
+// app.set('views', app.root('views'));
 app.set('view engine', 'hbs');
+app.engine('hbs', handlebars({
+  layoutsDir: __dirname + '/views/layouts',
+  extname: 'hbs',
+  defaultLayout: 'layout'
+}))
 
 
+console.log('APP.ROOT: ', app.root('public'));
 // Put static files like stylesheets in public/
 app.use(express.static(app.root('public')));
 

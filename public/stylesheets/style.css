@@ -33,6 +33,11 @@ body {
   width: 900px;
 }
 
+.auth-content {
+  margin: auto auto;
+  width: fit-content;
+}
+
 #messages-page {
   margin: 20px auto;
   width: 50%;
@@ -121,4 +126,5 @@ body {
 
 #page-content {
   margin: 2% auto;
+  width: 90%;
 }
