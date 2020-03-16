@@ -14,7 +14,7 @@ let router = new Router();
 // GET /
 router.get('/', async(request, response) => {
   let messages = await Message.query()
-    .select('messages.id', 'body', 'mood', 'messages.created_at', 'users.screen_name')
+    .select('messages.id', 'body', 'mood', 'messages.created_at', 'messages.user_id','users.screen_name', 'visible')
     .count('likes.id', {as: 'message_likes'})
     .leftJoin('likes', 'likes.message_id', 'messages.id')
     .leftJoin('users', 'users.id', 'messages.user_id')
@@ -23,11 +23,17 @@ router.get('/', async(request, response) => {
 
   console.log(messages);
 
+  let messagesToDisplay = messages.filter(message => message.visible);
   if (request.user) {
     let user = request.user;
-    response.render('index', { messages, user })
+
+    // Query the active user's messages and include them as a property in 'user'
+    user['messages'] = messages.filter(message => message.userId === user.id);
+
+
+    response.render('index', { messagesToDisplay, user });
   } else {
-    response.render('index', { messages });
+    response.render('index', { messagesToDisplay });
   }
 });
 
@@ -154,10 +160,10 @@ router.post('/messages/:messageId/like', async(request, response) => {
   } else {
     let user = request.user;
 
+    // This gets the user's likes of the message, but we've already set the unique aspect for this
     let userLikes = await user.$relatedQuery('likes').where('message_id', messageId);
 
-    console.log("PRINTING OUT USER LIKES: ",userMessageLike);
-
+    console.log('userLikes: ', userLikes);
     /* let userHasLikedMessage = await Message.query()
       .select('*')
       .where({
@@ -165,16 +171,43 @@ router.post('/messages/:messageId/like', async(request, response) => {
         likes(userId): user.id
       })
       .leftJoin('likes', 'likes.message_id', 'messages.id') */
-    await Like.query().insert({
-      messageId: messageId,
-      userId: request.user.id
-    });
-
-    response.redirect(`/#${messageId}`);
+    try {
+      await Like.query().insert({
+        messageId: messageId,
+        userId: request.user.id
+      });
+      response.redirect(`/#${messageId}`);
+    } catch {
+      response.redirect('/');
+    }
   }
-
-
-
 });
+
+// Toggle visibility of message (only for message author)
+router.post('/messages/:messageId/toggle', async(request, response) => {
+  let messageId = Number(request.params.messageId);
+  let user = request.user;
+
+  let messageObject = await Message.query().findById(messageId);
+  console.log('Message to toggle: ', messageObject);
+  let messageVisibility = messageObject.visible;
+  if (user.id === messageObject.userId) {
+    try {
+      await Message.query()
+        .findById(messageId)
+        .patch({
+          visible: !messageVisibility
+        });
+
+      console.log('TRY JUST RAN');
+      response.redirect('/');
+    } catch {
+      console.log('CATCH JUST RAN');
+      response.redirect('/');
+    }
+  } else {
+    response.redirect('/');
+  }
+})
 
 module.exports = router;
