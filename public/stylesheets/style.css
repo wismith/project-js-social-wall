@@ -2,6 +2,10 @@
   display: none;
 }
 
+.hide {
+  display: none;
+}
+
 #login.login-show {
   display: block;
 }
@@ -13,6 +17,17 @@ body {
   box-sizing: border-box;
   width: 100%;
 
+}
+
+.flex-container {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  padding: 1%;
+}
+
+.flex-child {
+  margin: 2%;
 }
 
 #page {
@@ -33,19 +48,36 @@ body {
   width: 900px;
 }
 
+#auth-buttons {
+  display: flex;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.auth-button {
+  margin: 2%;
+  text-justify: auto;
+  white-space: nowrap;
+}
+
 .auth-content {
   margin: auto auto;
   width: fit-content;
 }
 
 #messages-page {
-  margin: 20px auto;
-  width: 50%;
+  width: 60%;
+}
+
+#user-page {
+  width: 30%;
 }
 
 #message-form {
   border-bottom: 1px solid black;
   padding-bottom: 20px;
+  margin: auto;
+  padding: 1%;
 }
 
 #message-form button[type="submit"] {
@@ -54,11 +86,11 @@ body {
 
 #message-form #message-body-input {
   height: 100px;
-  width: 100%;
+  width: 90%;
 }
 
 #messages {
-  width: 100%;
+  width: 90%;
   text-align: center;
   padding: 2%;
 }
@@ -74,6 +106,7 @@ body {
   width: 100%;
   text-align: center;
   margin: 2% auto;
+  padding: 1%;
 }
 
 .message-list .message-body {
@@ -101,6 +134,7 @@ body {
   background-color: white;
   color: #772014;
   text-align: left;
+  display: block;
 }
 
 .notice {
@@ -125,6 +159,5 @@ body {
 }
 
 #page-content {
-  margin: 2% auto;
-  width: 90%;
+  width: 100%;
 }

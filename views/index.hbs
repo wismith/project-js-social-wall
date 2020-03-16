@@ -1,13 +1,8 @@
-<div id="auth-options">
-  {{#if user}}
-  <a href="/sign-out"><button>Sign Out</button></a>
-  {{else}}
-  <a href="/sign-up"><button>Sign Up</button></a>
-  <a href="/sign-in"><button>Sign In</button></a>
-  {{/if}}
-</div>
 
-<div id="messages-page">
+
+<main class="flex-container">
+
+<div id="messages-page" class="flex-child">
   {{#if errors}}
     <div class="notice error">
       <h2 class="notice-header">Error</h2>
@@ -21,13 +16,6 @@
     </div>
   {{/if}}
 
-  {{#if user}}
-  <div id="user-box">
-    <h5><em>Logged in as:</em></h5>
-    <h3>{{user.screenName}}</h3>
-  </div>
-  {{/if}}
-
   <form id="message-form" method="POST" action="/messages">
     <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
     <input type="text" name="mood" placeholder="Mood">
@@ -37,10 +25,10 @@
   <div id="messages" class="message-list">
     <h2>Messages</h2>
 
-    {{#unless messages}}
+    {{#unless messagesToDisplay}}
       <p>Sorry, no messages. :(</p>
     {{else}}
-        {{#each messages}}
+        {{#each messagesToDisplay}}
             <div class="message" id={{id}}>
               <div class="message-user">
                 <h2>{{screenName}}:</h2>
@@ -71,3 +59,9 @@
     {{/unless}}
   </div>
 </div>
+
+{{#if user}}
+{{> userPage}}
+{{/if}}
+
+</main>

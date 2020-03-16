@@ -1,0 +1,46 @@
+<aside id="user-page" class="flex-child">
+  <div id="user-box">
+    <h5><em>Logged in as:</em></h5>
+    <h2>{{user.screenName}}</h2>
+  </div>
+
+  <div id="user-messages">
+    <h3>Your Messages:</h3>
+    {{#each user.messages}}
+        <div class="message" id={{id}}>
+          <div class="message-user">
+            <h2>{{screenName}}:</h2>
+          </div>
+          <span class="toggle-message-button">
+            <form action="/messages/{{id}}/toggle" method="POST">
+              <button type="submit">
+                {{#if visible}}
+                Hide Message
+                {{else}}
+                Make Public
+                {{/if}}
+              </button>
+            </form>
+          </span>
+          <div class="message-body">
+            {{body}}
+          </div>
+          <div class="message-mood">
+            {{#if mood}}
+            feeling {{mood}}
+            {{/if}}
+          </div>
+          <div class="message-likes">
+            {{#if messageLikes}}
+            {{messageLikes}} Likes
+            {{/if}}
+          </div>
+          <div class="message-timestamp" style="display: inline">
+            Posted on {{createdAt}}
+          </div>
+        </div>
+      {{/each}}
+  </div>
+
+
+</aside>
