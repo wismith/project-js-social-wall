@@ -2,7 +2,6 @@
 
 <main class="flex-container">
 
-<div id="messages-page" class="flex-child">
   {{#if errors}}
     <div class="notice error">
       <h2 class="notice-header">Error</h2>
@@ -16,11 +15,17 @@
     </div>
   {{/if}}
 
+  {{#if user}}
   <form id="message-form" method="POST" action="/messages">
+    <h2>Write a new message:</h2>
     <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
     <input type="text" name="mood" placeholder="Mood">
     <button type="submit">Post Message</button>
   </form>
+
+  {{> userPage}}
+
+  {{/if}}
 
   <div id="messages" class="message-list">
     <h2>Messages</h2>
@@ -58,10 +63,5 @@
         {{/each}}
     {{/unless}}
   </div>
-</div>
-
-{{#if user}}
-{{> userPage}}
-{{/if}}
 
 </main>
