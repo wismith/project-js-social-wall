@@ -137,8 +137,12 @@ body {
   display: block;
 }
 
+.replies {
+  margin: 2% auto;
+}
 .message-reply {
-  margin: 2% 10% 2% 20%;
+  margin-top: 2%;
+  margin-right: 0;
   width: 75%;
   height: fit-content;
 }
