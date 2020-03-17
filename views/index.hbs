@@ -29,6 +29,7 @@
       <p>Sorry, no messages. :(</p>
     {{else}}
         {{#each messagesToDisplay}}
+          <div class="message-container">
             <div class="message" id={{id}}>
               <div class="message-user">
                 <h2>{{screenName}}:</h2>
@@ -54,6 +55,52 @@
               <div class="message-timestamp" style="display: inline">
                 Posted on {{createdAt}}
               </div></s>
+              <div class="message-reply">
+                {{> replyForm}}
+                <script>
+                  function showForm(form) {
+                    let r = document.getElementById(form);
+                    if (r.style.display === 'none') {
+                      r.style.display = 'block';
+                    } else {
+                      r.style.display = 'none';
+                    }
+                  }
+                </script>
+                <button onclick="showForm('{{id}}-reply')">Reply</button>
+              </div>
+
+            </div>
+            <div class="replies">
+                {{#each replies}}
+                <div class="message-reply message">
+                  <div class="message-user">
+                    <h2>{{screenName}}:</h2>
+                  </div>
+                  <div class="message-body">
+                    {{body}}
+                  </div>
+                  <div class="message-mood">
+                    {{#if mood}}
+                    feeling {{mood}}
+                    {{/if}}
+                  </div>
+
+                  <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
+                    <button type="submit">
+                      {{#if messageLikes}}
+                      {{messageLikes}} <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                      {{else}}
+                      <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                      {{/if}}
+                      </button>
+                  </form>
+                  <div class="message-timestamp" style="display: inline">
+                    Posted on {{createdAt}}
+                  </div></s>
+                </div>
+                {{/each}}
+              </div>
             </div>
         {{/each}}
     {{/unless}}

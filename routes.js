@@ -14,7 +14,7 @@ let router = new Router();
 // GET /
 router.get('/', async(request, response) => {
   let messages = await Message.query()
-    .select('messages.id', 'body', 'mood', 'messages.created_at', 'messages.user_id','users.screen_name', 'visible')
+    .select('messages.id', 'body', 'mood', 'messages.created_at', 'messages.user_id','users.screen_name', 'visible', 'messages.parent_message_id')
     .count('likes.id', {as: 'message_likes'})
     .leftJoin('likes', 'likes.message_id', 'messages.id')
     .leftJoin('users', 'users.id', 'messages.user_id')
@@ -23,7 +23,13 @@ router.get('/', async(request, response) => {
 
   console.log(messages);
 
-  let messagesToDisplay = messages.filter(message => message.visible);
+  let messagesToDisplay = messages.filter(message => message.visible && !message.parentMessageId);
+  for (let message of messagesToDisplay) {
+    message['replies'] = messages.filter(each => each.parentMessageId === message.id && each.visible);
+  }
+
+  console.log(messagesToDisplay);
+
   if (request.user) {
     let user = request.user;
 
@@ -182,6 +188,37 @@ router.post('/messages/:messageId/like', async(request, response) => {
     }
   }
 });
+
+router.post('/messages/:messageId/reply', async(request,response) => {
+  let messageId = Number(request.params.messageId);
+
+  let messageBody = request.body.body;
+  let messageMood = request.body.mood;
+
+  if (!request.user) {
+    response.redirect('/sign-in');
+  } else {
+    let user = request.user;
+
+    try {
+      await Message.query().insert({
+        body: messageBody,
+        mood: messageMood,
+        parentMessageId: messageId,
+        userId: user.id,
+      });
+
+      response.redirect(`/#${messageId}`);
+    } catch {
+      console.log('Reply failed. This is the catch block.');
+      response.redirect('/');
+    }
+  }
+
+
+
+
+})
 
 // Toggle visibility of message (only for message author)
 router.post('/messages/:messageId/toggle', async(request, response) => {

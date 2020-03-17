@@ -137,6 +137,12 @@ body {
   display: block;
 }
 
+.message-reply {
+  margin: 2% 10% 2% 20%;
+  width: 75%;
+  height: fit-content;
+}
+
 .notice {
   position: relative;
   padding: .75rem 1.25rem;
