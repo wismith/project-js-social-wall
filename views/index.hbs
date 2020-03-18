@@ -16,11 +16,13 @@
     </div>
   {{/if}}
 
+  {{#if user}}
   <form id="message-form" method="POST" action="/messages">
     <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
     <input type="text" name="mood" placeholder="Mood">
     <button type="submit">Post Message</button>
   </form>
+  {{/if}}
 
   <div id="messages" class="message-list">
     <h2>Messages</h2>
@@ -71,7 +73,9 @@
               </div>
 
             </div>
+            {{#if replies}}
             <div class="replies">
+              <h3>Replies:</h3>
                 {{#each replies}}
                 <div class="message-reply message">
                   <div class="message-user">
@@ -101,6 +105,7 @@
                 </div>
                 {{/each}}
               </div>
+              {{/if}}
             </div>
         {{/each}}
     {{/unless}}
