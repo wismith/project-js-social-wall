@@ -146,7 +146,7 @@ body {
 }
 
 .replies {
-  margin: 2% auto;
+  margin: 2% auto 4% auto;
   color: #E71D36;
 }
 .message-reply {
