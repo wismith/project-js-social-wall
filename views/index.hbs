@@ -15,6 +15,7 @@
     </div>
   {{/if}}
 
+  {{!-- Elements only presented for logged-in users --}}
   {{#if user}}
   <form id="message-form" method="POST" action="/messages">
     <h2>Write a new message:</h2>
@@ -27,6 +28,7 @@
 
   {{/if}}
 
+  {{!-- Display all messages and replies set to visible --}}
   <div id="messages" class="message-list">
     <h2>Messages</h2>
 
@@ -48,15 +50,32 @@
                 {{/if}}
               </div>
 
+              {{!-- Like button, which also shows # likes --}}
               <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
-                <button type="submit">
+                <button id="like-button-{{id}}" class="like-button" type="submit">
                   {{#if messageLikes}}
-                  {{messageLikes}} <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                  {{messageLikes}} <i class="fa fa-thumbs-up"></i>
                   {{else}}
-                  <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                  <i class="fa fa-thumbs-up"></i>
                   {{/if}}
-                  </button>
+                </button>
+
+                {{#if userHasLiked}}
+                <style>
+                  #like-button-{{id}} {
+                    color: #E71D36;
+                  }
+                </style>
+                {{else}}
+                <style>
+                  #like-button-{{id}} {
+                    color: #19180A;
+                  }
+                </style>
+                {{/if}}
+
               </form>
+
               <div class="message-timestamp" style="display: inline">
                 Posted on {{createdAt}}
               </div></s>
@@ -94,11 +113,24 @@
                   </div>
 
                   <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
-                    <button type="submit">
+                    <button id="like-button-{{id}}" type="submit">
                       {{#if messageLikes}}
-                      {{messageLikes}} <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                      {{messageLikes}} <i class="fa fa-thumbs-up"></i>
                       {{else}}
-                      <i class="fa fa-thumbs-up" style="color: #19180A"></i>
+                      <i class="fa fa-thumbs-up"></i>
+                      {{/if}}
+                      {{#if userHasLiked}}
+                      <style>
+                        #like-button-{{id}} {
+                          color: #E71D36;
+                        }
+                      </style>
+                      {{else}}
+                        <style>
+                          #like-button-{{id}} {
+                            color: #19180A;
+                          }
+                        </style>
                       {{/if}}
                       </button>
                   </form>

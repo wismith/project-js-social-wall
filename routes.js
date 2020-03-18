@@ -33,6 +33,18 @@ router.get('/', async(request, response) => {
   if (request.user) {
     let user = request.user;
 
+    for (let message of messages) {
+      let userHasLiked = await Like.query()
+        .count('likes.id')
+        .where({
+          'message_id': message.id,
+          'user_id': user.id
+        });
+
+      console.log(userHasLiked[0]);
+      message['userHasLiked'] = (Number(userHasLiked[0].count) === 1 ? true : false);
+
+    }
     // Query the active user's messages and include them as a property in 'user'
     user['messages'] = messages.filter(message => message.userId === user.id);
 
