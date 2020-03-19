@@ -17,15 +17,8 @@
 
   {{!-- Elements only presented for logged-in users --}}
   {{#if user}}
-  <form id="message-form" method="POST" action="/messages">
-    <h2>Write a new message:</h2>
-    <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
-    <input type="text" name="mood" placeholder="Mood">
-    <button type="submit">Post Message</button>
-  </form>
-
+  {{> messageForm}}
   {{> userPage}}
-
   {{/if}}
 
   {{!-- Display all messages and replies set to visible --}}
@@ -36,112 +29,7 @@
       <p>Sorry, no messages. :(</p>
     {{else}}
         {{#each messagesToDisplay}}
-          <div class="message-container">
-            <div class="message" id={{id}}>
-              <div class="message-user">
-                <h2>{{screenName}}:</h2>
-              </div>
-              <div class="message-body">
-                {{body}}
-              </div>
-              <div class="message-mood">
-                {{#if mood}}
-                feeling {{mood}}
-                {{/if}}
-              </div>
-
-              {{!-- Like button, which also shows # likes --}}
-              <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
-                <button id="like-button-{{id}}" class="like-button" type="submit">
-                  {{#if messageLikes}}
-                  {{messageLikes}} <i class="fa fa-thumbs-up"></i>
-                  {{else}}
-                  <i class="fa fa-thumbs-up"></i>
-                  {{/if}}
-                </button>
-
-                {{#if userHasLiked}}
-                <style>
-                  #like-button-{{id}} {
-                    color: #E71D36;
-                  }
-                </style>
-                {{else}}
-                <style>
-                  #like-button-{{id}} {
-                    color: #19180A;
-                  }
-                </style>
-                {{/if}}
-
-              </form>
-
-              <div class="message-timestamp" style="display: inline">
-                Posted on {{createdAt}}
-              </div></s>
-              <div class="message-reply">
-                {{> replyForm}}
-                <script>
-                  function showForm(form) {
-                    let r = document.getElementById(form);
-                    if (r.style.display === 'none') {
-                      r.style.display = 'block';
-                    } else {
-                      r.style.display = 'none';
-                    }
-                  }
-                </script>
-                <button onclick="showForm('{{id}}-reply')">Reply</button>
-              </div>
-
-            </div>
-            {{#if replies}}
-            <div class="replies">
-              <h3>Replies:</h3>
-                {{#each replies}}
-                <div class="message-reply message">
-                  <div class="message-user">
-                    <h2>{{screenName}}:</h2>
-                  </div>
-                  <div class="message-body">
-                    {{body}}
-                  </div>
-                  <div class="message-mood">
-                    {{#if mood}}
-                    feeling {{mood}}
-                    {{/if}}
-                  </div>
-
-                  <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
-                    <button id="like-button-{{id}}" type="submit">
-                      {{#if messageLikes}}
-                      {{messageLikes}} <i class="fa fa-thumbs-up"></i>
-                      {{else}}
-                      <i class="fa fa-thumbs-up"></i>
-                      {{/if}}
-                      {{#if userHasLiked}}
-                      <style>
-                        #like-button-{{id}} {
-                          color: #E71D36;
-                        }
-                      </style>
-                      {{else}}
-                        <style>
-                          #like-button-{{id}} {
-                            color: #19180A;
-                          }
-                        </style>
-                      {{/if}}
-                      </button>
-                  </form>
-                  <div class="message-timestamp" style="display: inline">
-                    Posted on {{createdAt}}
-                  </div></s>
-                </div>
-                {{/each}}
-              </div>
-              {{/if}}
-            </div>
+          {{> messageDisplay}}
         {{/each}}
     {{/unless}}
   </div>

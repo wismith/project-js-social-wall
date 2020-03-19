@@ -76,7 +76,7 @@ body {
   border-radius: .5rem;
 }
 
-#message-form {
+#new-message-form {
   float: left;
   width: 60%;
   padding: 2%;
@@ -87,11 +87,11 @@ body {
   border-radius: .5rem;
 }
 
-#message-form button[type="submit"] {
+#new-message-form button[type="submit"] {
   margin-top: 10px;
 }
 
-#message-form #message-body-input {
+#new-message-form #message-body-input {
   height: 100px;
   width: 90%;
 }
@@ -179,4 +179,13 @@ body {
 
 #page-content {
   width: 100%;
+}
+
+/* Like Button settings */
+.like {
+  color: #19180A;
+}
+
+.unlike {
+  color: #E71D36;
 }
