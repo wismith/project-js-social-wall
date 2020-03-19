@@ -164,7 +164,10 @@ router.post('/messages/:messageId/like', async(request, response) => {
 
     // This gets the user's likes of the message, but we've already set the unique aspect for this
     let userLikes = await user.$relatedQuery('likes').where('message_id', messageId);
-    let userLikeId = userLikes[0].id;
+
+    if (userLikes.length > 0) {
+      let userLikeId = userLikes[0].id;
+    }
 
     console.log('userLikes: ', userLikes);
 
