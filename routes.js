@@ -165,30 +165,25 @@ router.post('/messages/:messageId/like', async(request, response) => {
     // This gets the user's likes of the message, but we've already set the unique aspect for this
     let userLikes = await user.$relatedQuery('likes').where('message_id', messageId);
 
-    if (userLikes.length > 0) {
-      let userLikeId = userLikes[0].id;
-    }
 
     console.log('userLikes: ', userLikes);
+    console.log(userLikes[0]);
 
-    /* let userHasLikedMessage = await Message.query()
-      .select('*')
-      .where({
-        messageId: messageId,
-        likes(userId): user.id
-      })
-      .leftJoin('likes', 'likes.message_id', 'messages.id') */
     try {
-      await Like.query().insert({
-        messageId: messageId,
-        userId: request.user.id
-      });
-      console.log('Try block run');
-      response.redirect(`/#${messageId}`);
+      if (userLikes.length === 0) {
+        await Like.query().insert({
+          messageId: messageId,
+          userId: request.user.id
+        });
+        console.log('Try block run');
+        response.redirect(`/#${messageId}`);
+      } else {
+        let userLikeId = userLikes[0].id;
+        await Like.query().deleteById(userLikeId);
+        response.redirect(`/#${messageId}`);
+      }
 
     } catch {
-      console.log('Catch block run');
-      await Like.query().deleteById(userLikeId);
       response.redirect('/');
     }
   }
