@@ -20,14 +20,13 @@ body {
 }
 
 .flex-container {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  padding: 1%;
-}
-
-.flex-child {
-  margin: 2%;
+  /* display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center; */
+  width: 95%;
+  padding: 2%;
+  margin: 2% auto;
 }
 
 #page {
@@ -37,6 +36,7 @@ body {
   margin: 0 auto;
   width: 100%;
   background-color: #19180A;
+  border-bottom: 5px solid #AF4319;
   color: #E71D36;
   height: fit-content;
   padding: 2%;
@@ -65,34 +65,42 @@ body {
   width: fit-content;
 }
 
-#messages-page {
-  width: 60%;
-}
-
 #user-page {
-  width: 30%;
+  float: right;
+  width: 25%;
+  height: 100%;
+  background-color: #19180A;
+  border: 5px solid #AF4319;
+  color: #E71D36;
+  padding: 2%;
+  border-radius: .5rem;
 }
 
-#message-form {
-  border-bottom: 1px solid black;
-  padding-bottom: 20px;
-  margin: auto;
-  padding: 1%;
+#new-message-form {
+  float: left;
+  width: 60%;
+  padding: 2%;
+  background-color: #19180A;
+  color: #E71D36;
+  text-align: center;
+  border: 5px solid #AF4319;
+  border-radius: .5rem;
 }
 
-#message-form button[type="submit"] {
+#new-message-form button[type="submit"] {
   margin-top: 10px;
 }
 
-#message-form #message-body-input {
+#new-message-form #message-body-input {
   height: 100px;
   width: 90%;
 }
 
 #messages {
-  width: 90%;
+  width: 60%;
   text-align: center;
   padding: 2%;
+  float: left;
 }
 
 #messages h2 {
@@ -101,7 +109,7 @@ body {
 
 .message-list {
   background-color: #19180A;
-  border: 5px solid #19180A;
+  border: 5px solid #AF4319;
   border-radius: .5rem;
   width: 100%;
   text-align: center;
@@ -137,6 +145,17 @@ body {
   display: block;
 }
 
+.replies {
+  margin: 2% auto 4% auto;
+  color: #E71D36;
+}
+.message-reply {
+  margin-top: 2%;
+  margin-right: 0;
+  width: 75%;
+  height: fit-content;
+}
+
 .notice {
   position: relative;
   padding: .75rem 1.25rem;
@@ -160,4 +179,13 @@ body {
 
 #page-content {
   width: 100%;
+}
+
+/* Like Button settings */
+.like {
+  color: #19180A;
+}
+
+.unlike {
+  color: #E71D36;
 }

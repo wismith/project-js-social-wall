@@ -1,0 +1,63 @@
+<div class="message-container">
+  <div class="message" id={{id}}>
+    <div class="message-user">
+      <h2>{{screenName}}:</h2>
+    </div>
+    <div class="message-body">
+      {{body}}
+    </div>
+    <div class="message-mood">
+      {{#if mood}}
+      feeling {{mood}}
+      {{/if}}
+    </div>
+
+    {{!-- Like button, which also shows # likes --}}
+    {{> likeButton}}
+
+    <div class="message-timestamp" style="display: inline">
+      Posted on {{createdAt}}
+    </div></s>
+    <div class="message-reply">
+      {{> replyForm}}
+      <script>
+        function showForm(form) {
+          let r = document.getElementById(form);
+          if (r.style.display === 'none') {
+            r.style.display = 'block';
+          } else {
+            r.style.display = 'none';
+          }
+        }
+      </script>
+      <button onclick="showForm('{{id}}-reply')">Reply</button>
+    </div>
+
+  </div>
+  {{#if replies}}
+  <div class="replies">
+    <h3>Replies:</h3>
+      {{#each replies}}
+      <div class="message-reply message">
+        <div class="message-user">
+          <h2>{{screenName}}:</h2>
+        </div>
+        <div class="message-body">
+          {{body}}
+        </div>
+        <div class="message-mood">
+          {{#if mood}}
+          feeling {{mood}}
+          {{/if}}
+        </div>
+
+        {{> likeButton}}
+
+        <div class="message-timestamp" style="display: inline">
+          Posted on {{createdAt}}
+        </div></s>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+</div>

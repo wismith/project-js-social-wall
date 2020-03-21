@@ -1,0 +1,9 @@
+<form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
+  <button id="like-button-{{id}}" class="like-button {{#if userHasLiked}}unlike{{else}}like{{/if}}" type="submit">
+    {{#if messageLikes}}
+    {{messageLikes}} <i class="fa fa-thumbs-up"></i>
+    {{else}}
+    <i class="fa fa-thumbs-up"></i>
+    {{/if}}
+  </button>
+</form>

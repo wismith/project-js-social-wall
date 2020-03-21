@@ -2,7 +2,6 @@
 
 <main class="flex-container">
 
-<div id="messages-page" class="flex-child">
   {{#if errors}}
     <div class="notice error">
       <h2 class="notice-header">Error</h2>
@@ -16,12 +15,13 @@
     </div>
   {{/if}}
 
-  <form id="message-form" method="POST" action="/messages">
-    <textarea id="message-body-input" name="body" placeholder="Enter a message here."></textarea>
-    <input type="text" name="mood" placeholder="Mood">
-    <button type="submit">Post Message</button>
-  </form>
+  {{!-- Elements only presented for logged-in users --}}
+  {{#if user}}
+  {{> messageForm}}
+  {{> userPage}}
+  {{/if}}
 
+  {{!-- Display all messages and replies set to visible --}}
   <div id="messages" class="message-list">
     <h2>Messages</h2>
 
@@ -29,39 +29,9 @@
       <p>Sorry, no messages. :(</p>
     {{else}}
         {{#each messagesToDisplay}}
-            <div class="message" id={{id}}>
-              <div class="message-user">
-                <h2>{{screenName}}:</h2>
-              </div>
-              <div class="message-body">
-                {{body}}
-              </div>
-              <div class="message-mood">
-                {{#if mood}}
-                feeling {{mood}}
-                {{/if}}
-              </div>
-
-              <form action="/messages/{{id}}/like" method="POST" id="like-form" style="display: inline">
-                <button type="submit">
-                  {{#if messageLikes}}
-                  {{messageLikes}} <i class="fa fa-thumbs-up" style="color: #19180A"></i>
-                  {{else}}
-                  <i class="fa fa-thumbs-up" style="color: #19180A"></i>
-                  {{/if}}
-                  </button>
-              </form>
-              <div class="message-timestamp" style="display: inline">
-                Posted on {{createdAt}}
-              </div></s>
-            </div>
+          {{> messageDisplay}}
         {{/each}}
     {{/unless}}
   </div>
-</div>
-
-{{#if user}}
-{{> userPage}}
-{{/if}}
 
 </main>
